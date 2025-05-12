@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecureScan - Web Güvenlik Tarayıcı</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 50px; }
+        input { padding: 10px; width: 300px; }
+        button { padding: 10px 20px; background: #4CAF50; color: white; border: none; }
+        #result { margin-top: 20px; text-align: left; padding: 20px; border: 1px solid #ddd; }
+        .safe { color: green; }
+        .unsafe { color: red; }
+    </style>
+</head>
+<body>
+    <h1>SecureScan 🔒</h1>
+    <input type="text" id="url" placeholder="Site adı (örnek: google.com)">
+    <button onclick="scan()">Tara</button>
+    <div id="result"></div>
+
+    <script>
+        async function scan() {
+            const url = document.getElementById("url").value;
+            const response = await fetch(`http://localhost:5000/scan?url=${url}`);
+            const data = await response.json();
+            document.getElementById("result").innerHTML = `
+                <h3>🌐 ${url} tarandı:</h3>
+                <p>SSL Sertifikası: <span class="${data.ssl.includes('✅') ? 'safe' : 'unsafe'}">${data.ssl}</span></p>
+                <p>HTTP/HTTPS: <span class="${data.https.includes('✅') ? 'safe' : 'unsafe'}">${data.https}</span></p>
+            `;
+        }
+    </script>
+</body>
+</html>
